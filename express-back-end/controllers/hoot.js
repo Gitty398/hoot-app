@@ -65,11 +65,12 @@ router.post("/", verifyToken, async (req, res) => {
         }
 
 
-        const hoot = await Hoot.create(req.body)
+        const createdHoot = await Hoot.create(req.body)
 
-        hoot._doc.author = req.user
+        const populatedHoot = await Hoot.findById(createdHoot._id)
+            .populate("author", "username");
 
-        res.status(201).json({ hoot })
+        res.status(201).json(populatedHoot)
     } catch (error) {
         res.status(500).json({ err: error.message })
     }

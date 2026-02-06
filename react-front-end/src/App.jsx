@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import SignUpForm from "./components/SignUpForm/SignUpForm";
-import { Routes, Route } from "react-router";
+import { Routes, Route, useNavigate } from "react-router";
 import SignInForm from "./components/SignInForm/SignInForm";
 import HomePage from "./components/HomePage/HomePage";
 import Dashboard from "./components/Dashboard/Dashboard";
@@ -10,11 +10,21 @@ import { UserContext } from "./contexts/UserContext";
 import HootList from "./components/HootList/HootList"
 import * as hootService from './services/hootService';
 import HootDetails from './components/HootDetails/HootDetails';
+import HootForm from './components/HootForm/HootForm';
 
 
 function App() {
   const { user } = useContext(UserContext)
   const [hoots, setHoots] = useState([]);
+
+  const navigate = useNavigate();
+
+  const handleAddHoot = async (hootFormData) => {
+    const newHoot = await hootService.create(hootFormData);
+    setHoots([newHoot, ...hoots]);
+    navigate('/hoots');
+  };
+
 
   useEffect(() => {
     const fetchAllHoots = async () => {
@@ -37,6 +47,9 @@ function App() {
             <Route
               path='/hoots/:hootId'
               element={<HootDetails />} />
+            <Route
+              path='/hoots/new'
+              element={<HootForm handleAddHoot={handleAddHoot} />} />
           </>
         ) : (
           <>
