@@ -141,7 +141,8 @@ router.put("/:hootId", verifyToken, async (req, res) => {
 router.get("/:hootId", verifyToken, async (req, res) => {
     try {
 
-        const hoot = await Hoot.findById(req.params.hootId).populate("author", "comments.author")
+        const hoot = await Hoot.findById(req.params.hootId).populate("author")
+            .populate("comments.author")
         if (!hoot) {
             res.status(404)
             throw new Error("Cannot find Hoot. Please select another Hoot")
@@ -203,7 +204,7 @@ router.put("/:hootId/comments/:commentId", verifyToken, async (req, res) => {
 
         req.body.author = req.user._id
         comment.set(req.body)
-        
+
         await comment.save()
         await hoot.save()
 

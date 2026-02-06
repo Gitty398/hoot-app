@@ -9,7 +9,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import { UserContext } from "./contexts/UserContext";
 import HootList from "./components/HootList/HootList"
 import * as hootService from './services/hootService';
-
+import HootDetails from './components/HootDetails/HootDetails';
 
 
 function App() {
@@ -34,6 +34,9 @@ function App() {
           <>
             {/* Protected routes (available only to signed-in users) */}
             <Route path='/hoots' element={<HootList hoots={hoots} />} />
+            <Route
+              path='/hoots/:hootId'
+              element={<HootDetails />} />
           </>
         ) : (
           <>
